@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, BarChart3, ShieldCheck, Heart, Github, Instagram } from "lucide-react";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function LandingPage() {
   return (
@@ -27,6 +28,7 @@ export default function LandingPage() {
             <Link href="#testimonials" className="hover:text-white transition-colors">Testimonials</Link>
           </div>
           <div className="flex items-center gap-4">
+            <ThemeToggle />
             <Link href="/login" className="text-sm font-semibold text-slate-300 hover:text-white transition-colors hidden sm:block">
               Sign In
             </Link>

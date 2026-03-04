@@ -91,7 +91,7 @@ export default function MoneyManagementPage() {
                 type,
                 category,
                 amount: Number(amount),
-                mood: type === "expense" ? mood : null
+                mood: type === "expense" ? mood : "neutral"
             },
         ]);
 
@@ -231,8 +231,8 @@ export default function MoneyManagementPage() {
                                                     type="button"
                                                     onClick={() => setMood(m.value as any)}
                                                     className={`py-4 px-2 flex flex-col items-center justify-center gap-2 rounded-2xl border-2 transition-all ${mood === m.value
-                                                            ? `${m.bg} ${m.border} ${m.color} ring-4 ring-${m.color.split('-')[1]}-500/20 scale-[1.02]`
-                                                            : "border-slate-100 bg-white text-slate-400 hover:bg-slate-50 hover:border-slate-200"
+                                                        ? `${m.bg} ${m.border} ${m.color} ring-4 ring-${m.color.split('-')[1]}-500/20 scale-[1.02]`
+                                                        : "border-slate-100 bg-white text-slate-400 hover:bg-slate-50 hover:border-slate-200"
                                                         }`}
                                                 >
                                                     <m.icon className="w-8 h-8" />

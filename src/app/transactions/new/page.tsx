@@ -43,13 +43,18 @@ export default function NewTransactionPage() {
         return;
       }
 
-      // 3) insert ke table
+      // 3) convert emoji to mood string for postgres constraint
+      let parsedMood: "good" | "neutral" | "bad" = "neutral";
+      if (mood === "😄" || mood === "🙂") parsedMood = "good";
+      else if (mood === "😔" || mood === "😡") parsedMood = "bad";
+
+      // 4) insert ke table
       const { error } = await supabase.from("transactions").insert({
         user_id: user.id,
         type,
         category: category.trim(),
         amount: parsed,
-        mood,
+        mood: type === "expense" ? parsedMood : "neutral",
         note: note.trim() || null,
       });
 
