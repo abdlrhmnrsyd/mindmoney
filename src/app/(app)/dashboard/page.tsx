@@ -181,7 +181,7 @@ export default function GlobalDashboard() {
                                 <Wallet className="w-8 h-8 text-white" />
                             </div>
                         </div>
-                        <div className="relative z-10 flex gap-4">
+                        <div className="relative z-10 flex flex-wrap gap-4">
                             <Link href="/money" className="bg-indigo-500/30 hover:bg-indigo-500/50 backdrop-blur text-white text-sm font-semibold py-2 px-4 rounded-xl transition-colors border border-indigo-400/30">
                                 Send Money
                             </Link>

@@ -40,8 +40,9 @@ export default function LandingPage() {
             <Link href="/login" className="text-sm font-semibold text-slate-300 hover:text-white transition-colors hidden sm:block">
               Sign In
             </Link>
-            <Link href="/register" className="group relative inline-flex h-11 items-center justify-center overflow-hidden rounded-full bg-indigo-500 px-8 font-semibold text-neutral-50 transition-all hover:bg-indigo-400">
-              <span className="mr-2">Get Started</span>
+            <Link href="/register" className="group relative inline-flex h-10 sm:h-11 items-center justify-center overflow-hidden rounded-full bg-indigo-500 px-4 sm:px-8 font-semibold text-neutral-50 transition-all hover:bg-indigo-400">
+              <span className="hidden sm:inline mr-2">Get Started</span>
+              <span className="sm:hidden mr-2">Start</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
@@ -87,7 +88,7 @@ export default function LandingPage() {
               <div className="mt-10 flex items-center justify-center lg:justify-start gap-4 text-sm text-slate-500 font-medium">
                 <div className="flex -space-x-3">
                   {[1, 2, 3, 4].map(i => (
-                    <div key={i} className={`w-10 h-10 rounded-full border-2 border-slate-950 bg-slate-800 flex items-center justify-center z-[${5 - i}]`}>
+                    <div key={i} className="w-10 h-10 rounded-full border-2 border-slate-950 bg-slate-800 flex items-center justify-center" style={{ zIndex: 5 - i }}>
                       <span className="text-xs">{(i * 9).toString(36)}</span>
                     </div>
                   ))}

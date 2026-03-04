@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
-  const response = NextResponse.redirect(new URL("/dashboard", url.origin));
+  const next = url.searchParams.get("next") ?? "/dashboard";
 
   if (code) {
     const cookieStore = await cookies();
@@ -26,22 +26,8 @@ export async function GET(request: Request) {
                 if (shouldRememberMe) {
                   finalOptions.maxAge = 31536000;
                 }
-
-                // Set directly on the cookieStore (for server side context)
                 cookieStore.set(name, value, finalOptions);
-
-                // Ensure it gets attached to the outgoing redirect response 
-                // because `@supabase/ssr` with App Router sometimes loses options on redirect
-                response.cookies.set({
-                  name,
-                  value,
-                  ...finalOptions
-                });
               })
-
-              // Clean up the temporary OAuth cookie on both store and response
-              cookieStore.set("mindmoney_remember_me_oauth", "", { maxAge: -1, path: "/" });
-              response.cookies.set("mindmoney_remember_me_oauth", "", { maxAge: -1, path: "/" });
             } catch {
               // The `setAll` method was called from a Server Component.
             }
@@ -50,8 +36,16 @@ export async function GET(request: Request) {
       }
     );
 
-    await supabase.auth.exchangeCodeForSession(code);
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+
+    if (!error) {
+      try {
+        cookieStore.set("mindmoney_remember_me_oauth", "", { maxAge: -1, path: "/" });
+      } catch (e) { }
+
+      return NextResponse.redirect(new URL(next, url.origin));
+    }
   }
 
-  return response;
+  return NextResponse.redirect(new URL("/login?error=auth-code-error", url.origin));
 }
