@@ -28,7 +28,11 @@ export default function RegisterPage() {
             return;
         }
 
-        const { error } = await supabase.auth.signUp({
+        localStorage.removeItem("remember_me");
+        const { getSupabaseBrowserClient } = await import("@/lib/supabase/client");
+        const tempClient = getSupabaseBrowserClient(false);
+
+        const { error } = await tempClient.auth.signUp({
             email,
             password,
             options: {
@@ -49,7 +53,11 @@ export default function RegisterPage() {
     };
 
     const loginWithGoogle = async () => {
-        await supabase.auth.signInWithOAuth({
+        localStorage.removeItem("remember_me");
+        const { getSupabaseBrowserClient } = await import("@/lib/supabase/client");
+        const tempClient = getSupabaseBrowserClient(false);
+
+        await tempClient.auth.signInWithOAuth({
             provider: "google",
             options: {
                 redirectTo: `${location.origin}/auth/callback`,

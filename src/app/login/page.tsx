@@ -12,6 +12,7 @@ export default function LoginPage() {
     const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [isRememberMe, setIsRememberMe] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -20,7 +21,12 @@ export default function LoginPage() {
         setLoading(true);
         setError(null);
 
-        const { error } = await supabase.auth.signInWithPassword({
+        localStorage.setItem("remember_me", isRememberMe.toString());
+
+        const { getSupabaseBrowserClient } = await import("@/lib/supabase/client");
+        const tempClient = getSupabaseBrowserClient(isRememberMe);
+
+        const { error } = await tempClient.auth.signInWithPassword({
             email,
             password,
         });
@@ -36,7 +42,15 @@ export default function LoginPage() {
     };
 
     const loginWithGoogle = async () => {
-        await supabase.auth.signInWithOAuth({
+        localStorage.setItem("remember_me", isRememberMe.toString());
+
+        // Also set a temporary 5-minute cookie to survive the OAuth callback redirect
+        document.cookie = `mindmoney_remember_me_oauth=${isRememberMe.toString()}; path=/; max-age=300; SameSite=Lax`;
+
+        const { getSupabaseBrowserClient } = await import("@/lib/supabase/client");
+        const tempClient = getSupabaseBrowserClient(isRememberMe);
+
+        await tempClient.auth.signInWithOAuth({
             provider: "google",
             options: {
                 redirectTo: `${location.origin}/auth/callback`,
@@ -130,6 +144,8 @@ export default function LoginPage() {
                                         id="remember-me"
                                         name="remember-me"
                                         type="checkbox"
+                                        checked={isRememberMe}
+                                        onChange={(e) => setIsRememberMe(e.target.checked)}
                                         className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-slate-300 rounded"
                                     />
                                     <label htmlFor="remember-me" className="ml-2 block text-sm text-slate-700 dark:text-slate-300">

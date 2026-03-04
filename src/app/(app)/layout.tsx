@@ -43,6 +43,9 @@ export default function AppLayout({
     };
 
     const handleSignOut = async () => {
+        if (typeof window !== "undefined") {
+            localStorage.removeItem("remember_me");
+        }
         await supabase.auth.signOut();
         router.push("/login");
     };
