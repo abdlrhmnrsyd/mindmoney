@@ -18,6 +18,9 @@ import {
     ArrowDownCircle
 } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, Legend } from 'recharts';
+import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
+import { checkAchievements } from "@/lib/achievements";
 
 type Transaction = {
     id: string;
@@ -98,9 +101,11 @@ export default function MoneyManagementPage() {
         if (!error) {
             setAmount("");
             fetchData();
+            toast.success("Transaction saved!");
+            checkAchievements("add_transaction");
         } else {
             console.error(error);
-            alert("Failed to add transaction. Make sure the 'mood' column exists in your Supabase transactions table! (type: text)");
+            toast.error("Failed to add transaction.");
         }
         setSubmitting(false);
     };
@@ -149,12 +154,17 @@ export default function MoneyManagementPage() {
     }
 
     return (
-        <div className="text-slate-800 font-sans pb-8">
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-slate-800 dark:text-slate-100 font-sans pb-8"
+        >
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div>
-                        <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight mb-2">Money Management</h1>
+                        <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-2">Money Management</h1>
                         <p className="text-slate-500 text-lg">Track how your emotions influence your spending habits.</p>
                     </div>
                 </div>
@@ -171,7 +181,7 @@ export default function MoneyManagementPage() {
                             <p className="text-indigo-200 text-lg mb-8 max-w-sm">Keep your finances in check by logging every income and emotional expense.</p>
 
                             {/* Type Toggle */}
-                            <div className="flex bg-white/10 p-1.5 rounded-2xl backdrop-blur-md border border-white/10 max-w-sm">
+                            <div className="flex bg-white/10 dark:bg-slate-900/50 p-1.5 rounded-2xl backdrop-blur-md border border-white/10 dark:border-slate-800/50 max-w-sm">
                                 <button
                                     type="button"
                                     onClick={() => setType("expense")}
@@ -189,11 +199,11 @@ export default function MoneyManagementPage() {
                             </div>
                         </div>
 
-                        <div className="flex-[1.5] w-full bg-white rounded-3xl p-6 md:p-8 shadow-xl">
+                        <div className="flex-[1.5] w-full bg-white dark:bg-slate-950 rounded-3xl p-6 md:p-8 shadow-xl">
                             <form onSubmit={handleAddTransaction} className="space-y-6">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-700 mb-2">Amount (Rp)</label>
+                                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Amount (Rp)</label>
                                         <div className="relative">
                                             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                                 <span className="text-slate-400 font-semibold">Rp</span>
@@ -204,17 +214,17 @@ export default function MoneyManagementPage() {
                                                 min="1"
                                                 value={amount}
                                                 onChange={(e) => setAmount(e.target.value)}
-                                                className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all text-lg font-bold text-slate-800"
+                                                className="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-800 rounded-2xl focus:bg-white dark:focus:bg-slate-950 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all text-lg font-bold text-slate-800 dark:text-slate-100"
                                                 placeholder="50.000"
                                             />
                                         </div>
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-700 mb-2">Category</label>
+                                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Category</label>
                                         <select
                                             value={category}
                                             onChange={(e) => setCategory(e.target.value)}
-                                            className="w-full px-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:bg-white focus:border-indigo-500 outline-none transition-all appearance-none text-lg font-semibold text-slate-700"
+                                            className="w-full px-4 py-4 bg-slate-50 dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-800 rounded-2xl focus:bg-white dark:focus:bg-slate-950 focus:border-indigo-500 outline-none transition-all appearance-none text-lg font-semibold text-slate-700 dark:text-slate-100"
                                         >
                                             {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                                         </select>
@@ -223,7 +233,7 @@ export default function MoneyManagementPage() {
 
                                 {type === "expense" && (
                                     <div className="pt-2 border-t border-slate-100">
-                                        <label className="block text-sm font-bold text-slate-700 mb-3 text-center md:text-left">How did you feel spending this?</label>
+                                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-3 text-center md:text-left">How did you feel spending this?</label>
                                         <div className="grid grid-cols-3 gap-3 md:gap-4">
                                             {MOODS.map(m => (
                                                 <button
@@ -232,7 +242,7 @@ export default function MoneyManagementPage() {
                                                     onClick={() => setMood(m.value as any)}
                                                     className={`py-4 px-2 flex flex-col items-center justify-center gap-2 rounded-2xl border-2 transition-all ${mood === m.value
                                                         ? `${m.bg} ${m.border} ${m.color} ring-4 ring-${m.color.split('-')[1]}-500/20 scale-[1.02]`
-                                                        : "border-slate-100 bg-white text-slate-400 hover:bg-slate-50 hover:border-slate-200"
+                                                        : "border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 hover:border-slate-200 dark:hover:border-slate-700"
                                                         }`}
                                                 >
                                                     <m.icon className="w-8 h-8" />
@@ -258,8 +268,8 @@ export default function MoneyManagementPage() {
                 {/* --- SECONDARY: Emotional Spending Profile --- */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-4">
                     {/* The Chart */}
-                    <div className="lg:col-span-1 bg-white rounded-3xl p-6 shadow-sm border border-slate-100 flex flex-col items-center justify-center">
-                        <h3 className="text-lg font-bold text-slate-800 self-start w-full mb-4 flex items-center gap-2">
+                    <div className="lg:col-span-1 bg-white dark:bg-slate-950 rounded-3xl p-6 shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col items-center justify-center">
+                        <h3 className="text-lg font-bold text-slate-800 dark:text-white self-start w-full mb-4 flex items-center gap-2">
                             <PieChartIcon className="w-5 h-5 text-indigo-500" />
                             Emotional Spending
                         </h3>
@@ -317,10 +327,10 @@ export default function MoneyManagementPage() {
                                 <div className="p-3 bg-slate-200 rounded-xl text-slate-600">
                                     <Meh className="w-6 h-6" />
                                 </div>
-                                <span className="font-semibold text-slate-700">Neutral Spending</span>
+                                <span className="font-semibold text-slate-700 dark:text-slate-300">Neutral Spending</span>
                             </div>
                             <div>
-                                <h3 className="text-2xl font-bold text-slate-800">{formatCurrency(moodTotals.neutral)}</h3>
+                                <h3 className="text-2xl font-bold text-slate-800 dark:text-white">{formatCurrency(moodTotals.neutral)}</h3>
                                 <p className="text-sm font-medium text-slate-500 mt-1">
                                     {Math.round((moodTotals.neutral / totalExpenseAmount) * 100)}% of total expenses
                                 </p>
@@ -345,9 +355,9 @@ export default function MoneyManagementPage() {
                 </div>
 
                 {/* --- TERTIARY: Transaction Ledger --- */}
-                <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-100 mt-4">
+                <div className="bg-white dark:bg-slate-950 rounded-3xl p-6 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800 mt-4">
                     <div className="flex justify-between items-center mb-6">
-                        <h3 className="text-xl font-bold text-slate-800">Ledger</h3>
+                        <h3 className="text-xl font-bold text-slate-800 dark:text-white">Ledger</h3>
                         <div className="flex gap-2">
                             {(["all", "income", "expense"] as const).map(f => (
                                 <button
@@ -368,50 +378,60 @@ export default function MoneyManagementPage() {
                             <p className="text-lg">No records found</p>
                         </div>
                     ) : (
-                        <div className="space-y-3">
-                            {filteredTransactions.map(t => {
-                                const isIncome = t.type === "income";
-                                const moodData = MOODS.find(m => m.value === t.mood) || MOODS[1];
-                                const MoodIcon = moodData.icon;
+                        <motion.div layout className="space-y-3">
+                            <AnimatePresence>
+                                {filteredTransactions.map(t => {
+                                    const isIncome = t.type === "income";
+                                    const moodData = MOODS.find(m => m.value === t.mood) || MOODS[1];
+                                    const MoodIcon = moodData.icon;
 
-                                return (
-                                    <div key={t.id} className="group flex items-center justify-between p-4 rounded-2xl hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-all">
-                                        <div className="flex items-center gap-4">
-                                            <div className={`p-3 rounded-xl flex items-center justify-center ${isIncome ? "bg-emerald-50 text-emerald-600" : moodData.bg + " " + moodData.color
-                                                }`}>
-                                                {isIncome ? <ArrowUpCircle className="w-6 h-6" /> : <MoodIcon className="w-6 h-6" />}
+                                    return (
+                                        <motion.div
+                                            layout
+                                            initial={{ opacity: 0, scale: 0.95 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            exit={{ opacity: 0, scale: 0.9 }}
+                                            transition={{ duration: 0.2 }}
+                                            key={t.id}
+                                            className="group flex items-center justify-between p-4 rounded-2xl hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-all"
+                                        >
+                                            <div className="flex items-center gap-4">
+                                                <div className={`p-3 rounded-xl flex items-center justify-center ${isIncome ? "bg-emerald-50 text-emerald-600" : moodData.bg + " " + moodData.color
+                                                    }`}>
+                                                    {isIncome ? <ArrowUpCircle className="w-6 h-6" /> : <MoodIcon className="w-6 h-6" />}
+                                                </div>
+                                                <div>
+                                                    <p className="font-bold text-slate-800 dark:text-slate-100">{t.category}</p>
+                                                    <p className="text-xs font-medium text-slate-500 flex items-center gap-1 mt-0.5">
+                                                        <Calendar className="w-3 h-3" />
+                                                        {new Date(t.created_at).toLocaleDateString()}
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <p className="font-bold text-slate-800">{t.category}</p>
-                                                <p className="text-xs font-medium text-slate-500 flex items-center gap-1 mt-0.5">
-                                                    <Calendar className="w-3 h-3" />
-                                                    {new Date(t.created_at).toLocaleDateString()}
-                                                </p>
-                                            </div>
-                                        </div>
 
-                                        <div className="flex items-center gap-4">
-                                            <div className="text-right">
-                                                <p className={`font-bold text-lg ${isIncome ? "text-emerald-600" : "text-slate-800"}`}>
-                                                    {isIncome ? "+" : "-"}{formatCurrency(t.amount)}
-                                                </p>
+                                            <div className="flex items-center gap-4">
+                                                <div className="text-right">
+                                                    <p className={`font-bold text-lg ${isIncome ? "text-emerald-600 dark:text-emerald-400" : "text-slate-800 dark:text-slate-100"}`}>
+                                                        {isIncome ? "+" : "-"}{formatCurrency(t.amount)}
+                                                    </p>
+                                                </div>
+                                                <button
+                                                    onClick={() => handleDelete(t.id)}
+                                                    className="p-2 text-slate-300 hover:text-rose-500 hover:bg-rose-50 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
+                                                    title="Delete"
+                                                >
+                                                    <Trash2 className="w-5 h-5" />
+                                                </button>
                                             </div>
-                                            <button
-                                                onClick={() => handleDelete(t.id)}
-                                                className="p-2 text-slate-300 hover:text-rose-500 hover:bg-rose-50 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
-                                                title="Delete"
-                                            >
-                                                <Trash2 className="w-5 h-5" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                )
-                            })}
-                        </div>
+                                        </motion.div>
+                                    )
+                                })}
+                            </AnimatePresence>
+                        </motion.div>
                     )}
                 </div>
 
             </main>
-        </div>
+        </motion.div>
     );
 }

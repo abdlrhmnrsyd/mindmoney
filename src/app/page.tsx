@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { ArrowRight, BarChart3, ShieldCheck, Heart, Github, Instagram } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 
@@ -14,7 +17,12 @@ export default function LandingPage() {
       </div>
 
       {/* --- Navigation --- */}
-      <nav className="relative z-10 border-b border-white/5 bg-slate-950/50 backdrop-blur-xl">
+      <motion.nav
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="relative z-10 border-b border-white/5 bg-slate-950/50 backdrop-blur-xl"
+      >
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3 group cursor-pointer">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-300">
@@ -38,7 +46,7 @@ export default function LandingPage() {
             </Link>
           </div>
         </div>
-      </nav>
+      </motion.nav>
 
       {/* --- Hero Section --- */}
       <main className="relative z-10 pt-20 pb-32 px-6">
@@ -46,7 +54,12 @@ export default function LandingPage() {
           <div className="flex flex-col lg:flex-row items-center gap-16">
 
             {/* Text Content */}
-            <div className="flex-1 text-center lg:text-left">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="flex-1 text-center lg:text-left"
+            >
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-md">
                 <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 <span className="text-xs font-semibold text-emerald-400 uppercase tracking-widest">MindMoney 2.0 is Live</span>
@@ -81,10 +94,15 @@ export default function LandingPage() {
                 </div>
                 <p>Join 10,000+ mindful spenders</p>
               </div>
-            </div>
+            </motion.div>
 
             {/* Abstract Hero Image / Mockup */}
-            <div className="flex-1 w-full max-w-xl lg:max-w-none relative perspective-1000">
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="flex-1 w-full max-w-xl lg:max-w-none relative perspective-1000"
+            >
               {/* Glow behind mockup */}
               <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/20 to-emerald-500/20 blur-3xl rounded-[3rem]"></div>
 
@@ -122,7 +140,7 @@ export default function LandingPage() {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
           </div>
         </div>
@@ -131,38 +149,62 @@ export default function LandingPage() {
       {/* --- Features Section --- */}
       <section id="features" className="relative z-10 py-24 bg-slate-900/50 border-y border-white/5">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
             <h2 className="text-3xl md:text-5xl font-bold mb-4">Not just another tracker.</h2>
             <p className="text-lg text-slate-400 max-w-2xl mx-auto">MindMoney brings a psychological approach to wealth management, providing tools that make saving feel effortless and spending feel intentional.</p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Feature 1 */}
-            <div className="bg-slate-900 border border-white/5 rounded-3xl p-8 hover:bg-slate-800/80 transition-colors">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="bg-slate-900 border border-white/5 rounded-3xl p-8 hover:bg-slate-800/80 transition-colors"
+            >
               <div className="w-14 h-14 bg-indigo-500/20 text-indigo-400 flex items-center justify-center rounded-2xl mb-6">
                 <BarChart3 className="w-7 h-7" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-white">Visual Analytics</h3>
               <p className="text-slate-400 leading-relaxed">Beautifully crafted charts that make understanding your cash flow intuitive. See exactly where every Rupiah goes without the spreadsheet headache.</p>
-            </div>
+            </motion.div>
 
             {/* Feature 2 */}
-            <div className="bg-slate-900 border border-white/5 rounded-3xl p-8 hover:bg-slate-800/80 transition-colors">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="bg-slate-900 border border-white/5 rounded-3xl p-8 hover:bg-slate-800/80 transition-colors"
+            >
               <div className="w-14 h-14 bg-rose-500/20 text-rose-400 flex items-center justify-center rounded-2xl mb-6">
                 <Heart className="w-7 h-7" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-white">Mood Tracking</h3>
               <p className="text-slate-400 leading-relaxed">Correlate your spending with your emotions. Discover if you spend more when stressed, and build healthier financial coping mechanisms.</p>
-            </div>
+            </motion.div>
 
             {/* Feature 3 */}
-            <div className="bg-slate-900 border border-white/5 rounded-3xl p-8 hover:bg-slate-800/80 transition-colors">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="bg-slate-900 border border-white/5 rounded-3xl p-8 hover:bg-slate-800/80 transition-colors"
+            >
               <div className="w-14 h-14 bg-emerald-500/20 text-emerald-400 flex items-center justify-center rounded-2xl mb-6">
                 <ShieldCheck className="w-7 h-7" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-white">Goal Gamification</h3>
               <p className="text-slate-400 leading-relaxed">Turn your savings targets into achievable milestones. Our visual wishlists make locking money away feel deeply rewarding.</p>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>

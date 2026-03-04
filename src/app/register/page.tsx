@@ -5,6 +5,8 @@ import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Wallet, Mail, Lock, Loader2, ArrowRight, User } from "lucide-react";
+import { motion } from "framer-motion";
+import { toast } from "sonner";
 
 export default function RegisterPage() {
     const router = useRouter();
@@ -21,6 +23,7 @@ export default function RegisterPage() {
 
         if (password !== confirmPassword) {
             setError("Passwords do not match");
+            toast.error("Passwords do not match");
             setLoading(false);
             return;
         }
@@ -35,10 +38,12 @@ export default function RegisterPage() {
 
         if (error) {
             setError(error.message);
+            toast.error(error.message);
             setLoading(false);
         } else {
             // Depending on Supabase settings, user might need to confirm email
             // Here we assume auto-login or redirect to dashboard for simplicity
+            toast.success("Account created successfully!");
             router.push("/dashboard");
         }
     };
@@ -53,10 +58,15 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="min-h-screen flex bg-white font-sans">
+        <div className="min-h-screen flex bg-white dark:bg-slate-950 font-sans">
 
             {/* Left Column: Graphic/Image */}
-            <div className="hidden lg:block relative w-1/2 bg-slate-50">
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6 }}
+                className="hidden lg:block relative w-1/2 bg-slate-50"
+            >
                 <div className="absolute inset-0 bg-gradient-to-tr from-violet-600 to-indigo-500">
                     <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
 
@@ -91,10 +101,15 @@ export default function RegisterPage() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </motion.div>
 
             {/* Right Column: Register Form */}
-            <div className="flex-1 flex flex-col justify-center px-4 sm:px-6 lg:flex-none lg:w-1/2 lg:px-20 xl:px-24">
+            <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="flex-1 flex flex-col justify-center px-4 sm:px-6 lg:flex-none lg:w-1/2 lg:px-20 xl:px-24"
+            >
                 <div className="mx-auto w-full max-w-sm lg:w-96">
 
                     {/* Logo & Header */}
@@ -107,7 +122,7 @@ export default function RegisterPage() {
                                 MindMoney
                             </span>
                         </div>
-                        <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+                        <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                             Create an account
                         </h2>
                         <p className="mt-2 text-sm text-slate-500">
@@ -120,7 +135,7 @@ export default function RegisterPage() {
 
                             {/* Email Input */}
                             <div>
-                                <label className="block text-sm font-medium text-slate-700">
+                                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Email address
                                 </label>
                                 <div className="mt-1 relative rounded-md shadow-sm">
@@ -132,7 +147,7 @@ export default function RegisterPage() {
                                         required
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        className="block w-full pl-10 pr-3 py-2.5 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors"
+                                        className="block w-full pl-10 pr-3 py-2.5 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors"
                                         placeholder="you@example.com"
                                     />
                                 </div>
@@ -140,7 +155,7 @@ export default function RegisterPage() {
 
                             {/* Password Input */}
                             <div>
-                                <label className="block text-sm font-medium text-slate-700">
+                                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Password
                                 </label>
                                 <div className="mt-1 relative rounded-md shadow-sm">
@@ -152,7 +167,7 @@ export default function RegisterPage() {
                                         required
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        className="block w-full pl-10 pr-3 py-2.5 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors"
+                                        className="block w-full pl-10 pr-3 py-2.5 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors"
                                         placeholder="Create a strong password"
                                     />
                                 </div>
@@ -160,7 +175,7 @@ export default function RegisterPage() {
 
                             {/* Confirm Password Input */}
                             <div>
-                                <label className="block text-sm font-medium text-slate-700">
+                                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Confirm Password
                                 </label>
                                 <div className="mt-1 relative rounded-md shadow-sm">
@@ -172,7 +187,7 @@ export default function RegisterPage() {
                                         required
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}
-                                        className="block w-full pl-10 pr-3 py-2.5 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors"
+                                        className="block w-full pl-10 pr-3 py-2.5 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors"
                                         placeholder="Repeat password"
                                     />
                                 </div>
@@ -207,14 +222,14 @@ export default function RegisterPage() {
                                     <div className="w-full border-t border-slate-200" />
                                 </div>
                                 <div className="relative flex justify-center text-sm">
-                                    <span className="px-2 bg-white text-slate-500">Or sign up with</span>
+                                    <span className="px-2 bg-white dark:bg-slate-950 text-slate-500">Or sign up with</span>
                                 </div>
                             </div>
 
                             <div className="mt-6">
                                 <button
                                     onClick={loginWithGoogle}
-                                    className="w-full flex justify-center items-center gap-3 py-2.5 px-4 border border-slate-200 rounded-xl shadow-sm bg-white text-sm font-medium text-slate-700 hover:bg-slate-50 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all"
+                                    className="w-full flex justify-center items-center gap-3 py-2.5 px-4 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm bg-white dark:bg-slate-900 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all"
                                 >
                                     <svg className="h-5 w-5" viewBox="0 0 24 24">
                                         <path
@@ -247,7 +262,7 @@ export default function RegisterPage() {
                         </p>
                     </div>
                 </div>
-            </div>
+            </motion.div>
 
         </div>
     );

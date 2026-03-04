@@ -11,8 +11,10 @@ import {
     LayoutDashboard,
     Menu,
     X,
-    Settings
+    Settings,
+    PieChart
 } from "lucide-react";
+import { CommandPalette } from "@/components/CommandPalette";
 
 export default function AppLayout({
     children,
@@ -47,6 +49,7 @@ export default function AppLayout({
         { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
         { name: "Money Management", href: "/money", icon: Wallet },
         { name: "Wishlists", href: "/wishlists", icon: Target },
+        { name: "Reports", href: "/reports", icon: PieChart },
         { name: "Settings", href: "/settings", icon: Settings },
     ];
 
@@ -165,6 +168,7 @@ export default function AppLayout({
                 {children}
             </main>
 
+            <CommandPalette />
         </div>
     );
 }
