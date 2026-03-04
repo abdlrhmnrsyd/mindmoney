@@ -10,7 +10,7 @@ export async function processRecurringTransactions(supabase: SupabaseClient) {
             .lte('next_date', new Date().toISOString());
 
         if (fetchError) {
-            console.error("Error fetching recurring:", fetchError);
+            console.error("Error fetching recurring:", fetchError.message || fetchError);
             return { success: false, error: fetchError };
         }
 

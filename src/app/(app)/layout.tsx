@@ -12,9 +12,11 @@ import {
     Menu,
     X,
     Settings,
-    PieChart
+    PieChart,
+    RefreshCw
 } from "lucide-react";
 import { CommandPalette } from "@/components/CommandPalette";
+import { AIChat } from "@/components/AIChat";
 
 export default function AppLayout({
     children,
@@ -50,6 +52,7 @@ export default function AppLayout({
         { name: "Money Management", href: "/money", icon: Wallet },
         { name: "Wishlists", href: "/wishlists", icon: Target },
         { name: "Reports", href: "/reports", icon: PieChart },
+        { name: "Subscriptions", href: "/subscriptions", icon: RefreshCw },
         { name: "Settings", href: "/settings", icon: Settings },
     ];
 
@@ -169,6 +172,7 @@ export default function AppLayout({
             </main>
 
             <CommandPalette />
+            <AIChat />
         </div>
     );
 }

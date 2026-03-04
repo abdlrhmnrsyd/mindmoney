@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer } from "recharts";
+import { processRecurringTransactions } from "@/lib/process-recurring";
 
 type Transaction = {
     id: string;
@@ -68,6 +69,8 @@ export default function GlobalDashboard() {
                 router.push("/login");
                 return;
             }
+
+            await processRecurringTransactions(supabase);
 
             // Fetch recent transactions (limit to 20 for chart)
             const { data: txData } = await supabase

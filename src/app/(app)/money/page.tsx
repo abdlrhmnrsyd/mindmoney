@@ -15,7 +15,8 @@ import {
     PieChart as PieChartIcon,
     Wallet,
     ArrowUpCircle,
-    ArrowDownCircle
+    ArrowDownCircle,
+    Camera
 } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, Legend } from 'recharts';
 import { motion, AnimatePresence } from "framer-motion";
@@ -45,6 +46,7 @@ export default function MoneyManagementPage() {
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
     const [filter, setFilter] = useState<"all" | "income" | "expense">("all");
+    const [isScanning, setIsScanning] = useState(false);
 
     // Form State
     const [amount, setAmount] = useState("");
@@ -118,6 +120,40 @@ export default function MoneyManagementPage() {
         }
     };
 
+    const handleScanReceipt = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setIsScanning(true);
+        const toastId = toast.loading("Analyzing receipt with AI...");
+
+        try {
+            const formData = new FormData();
+            formData.append("receipt", file);
+
+            const res = await fetch("/api/scan", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await res.json();
+            if (res.ok && data.amount) {
+                setType("expense");
+                setAmount(data.amount.toString());
+                if (data.category && CATEGORIES.includes(data.category)) {
+                    setCategory(data.category);
+                }
+                toast.success("Receipt scanned successfully!", { id: toastId });
+            } else {
+                toast.error(data.error || "Failed to scan receipt. Is it a clear image?", { id: toastId });
+            }
+        } catch (error) {
+            toast.error("Network error analyzing receipt.", { id: toastId });
+        }
+        setIsScanning(false);
+        e.target.value = "";
+    };
+
     const formatCurrency = (val: number) => {
         return new Intl.NumberFormat("id-ID", {
             style: "currency",
@@ -179,6 +215,24 @@ export default function MoneyManagementPage() {
                         <div className="flex-1 text-white">
                             <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-4 leading-tight">Record New<br /><span className="text-indigo-400">Transaction</span></h2>
                             <p className="text-indigo-200 text-lg mb-8 max-w-sm">Keep your finances in check by logging every income and emotional expense.</p>
+
+                            {/* AI Scanner Button */}
+                            <div className="mb-8 max-w-sm">
+                                <label className={`flex items-center justify-center gap-2 w-full py-4 rounded-2xl border-2 border-dashed transition-all cursor-pointer ${isScanning ? 'border-indigo-400 bg-indigo-500/20 text-indigo-200' : 'border-indigo-500/50 hover:bg-white/5 hover:border-indigo-400 text-slate-300 hover:text-white'}`}>
+                                    {isScanning ? (
+                                        <>
+                                            <div className="w-5 h-5 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin"></div>
+                                            <span className="font-bold">Scanning Receipt...</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Camera className="w-5 h-5" />
+                                            <span className="font-bold">Scan Receipt (AI)</span>
+                                            <input type="file" accept="image/*" className="hidden" onChange={handleScanReceipt} disabled={isScanning} />
+                                        </>
+                                    )}
+                                </label>
+                            </div>
 
                             {/* Type Toggle */}
                             <div className="flex bg-white/10 dark:bg-slate-900/50 p-1.5 rounded-2xl backdrop-blur-md border border-white/10 dark:border-slate-800/50 max-w-sm">
