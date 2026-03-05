@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     try {
         const { message, contextObj } = await req.json();
         const genAI = new GoogleGenerativeAI(apiKey);
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         const prompt = `You are MindMoney AI, a helpful, enthusiastic, and concise AI financial assistant built into the MindMoney app.
 Here is a summary of the user's recent financial context (transactions, totals, etc):

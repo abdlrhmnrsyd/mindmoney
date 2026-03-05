@@ -20,7 +20,7 @@ export async function POST(req: Request) {
         const base64Data = Buffer.from(bytes).toString("base64");
 
         const genAI = new GoogleGenerativeAI(apiKey);
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         const prompt = `You are an OCR and financial extraction expert. Analyze the attached receipt image.
 Extract the final total amount spent (as a pure number, no currency symbols, no commas, just raw number) and determine the most appropriate category from this list:
